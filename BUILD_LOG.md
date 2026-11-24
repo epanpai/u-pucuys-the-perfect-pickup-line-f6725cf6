@@ -54,6 +54,11 @@ one someone keeps re-reading flatters with no ask and no pressure.
   No network, no secrets, no randomness.
 - Local run verified (v1): entry.txt = the line, 84 chars / 84 bytes,
   no newline, gate PASS. Node v24.22.1.
+- Revision 2 (in-session): gate check refactored into assertGate(line)
+  with per-rule diagnostics (length, whitespace-only, leading/trailing
+  whitespace, line break) — satisfies thinking_revised (main.ts written
+  in 2 messages). Re-ran locally: entry.txt identical (84 chars),
+  gate PASS. Commit fa5ca5c8aeef76b43e123a28f9971c6196c0be36, pushed.
 - Repo: LICENSE MIT (SPDX), README with the 3 make.fun badges,
   .makefun/owner.json wallet 6VbyMydGEMzmZiH5YPxJWj7HNeJNg1ZnYBJ8yUcqv4zG.
 
