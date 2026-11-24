@@ -37,16 +37,20 @@ const out = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 // Self-check the gate before writing, so a bad edit can never ship a
 // rejected entry: UTF-8 text, 1–200 characters, not whitespace-only,
 // exactly one line (no newline at all), no leading/trailing whitespace
-// that would pad the judged text. The line is 84 characters.
-if (
-  LINE.length < 1 ||
-  LINE.length > 200 ||
-  LINE.trim() === '' ||
-  LINE !== LINE.trim() ||
-  /[\r\n]/.test(LINE)
-) {
-  throw new Error(`entry violates the gate: ${LINE.length} chars`);
+// that would pad the judged text. The line is 84 characters, 84 bytes.
+function assertGate(line: string): void {
+  const problems: string[] = [];
+  if (line.length < 1 || line.length > 200)
+    problems.push(`length ${line.length} outside 1–200`);
+  if (line.trim() === '') problems.push('whitespace-only');
+  if (line !== line.trim()) problems.push('leading/trailing whitespace');
+  if (/[\r\n]/.test(line)) problems.push('contains a line break');
+  if (problems.length > 0) {
+    throw new Error(`entry violates the gate: ${problems.join('; ')}`);
+  }
 }
+
+assertGate(LINE);
 
 mkdirSync(out, { recursive: true });
 const target = join(out, 'entry.txt');
